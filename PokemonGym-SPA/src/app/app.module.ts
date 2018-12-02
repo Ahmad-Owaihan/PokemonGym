@@ -11,24 +11,37 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './_services/auth.service';
 import { ErrorInterceptorProvider } from './_services/error.intrerceptor';
 import { AlertifyService } from './_services/alertify.service';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './router';
+import { PokemonsComponent } from './pokemons/pokemons.component';
+import { TournamentsComponent } from './tournaments/tournaments.component';
+import { AdminComponent } from './admin/admin.component';
+import { AuthGuard } from './_guards/auth.guard';
+import { TournamentService } from './_services/tournament.service';
 
 @NgModule({
    declarations: [
       AppComponent,
       HomeComponent,
       NavComponent,
-      RegisterComponent
+      RegisterComponent,
+      PokemonsComponent,
+      TournamentsComponent,
+      AdminComponent
    ],
    imports: [
       BrowserModule,
       HttpClientModule,
       FormsModule,
-      BsDropdownModule.forRoot()
+      BsDropdownModule.forRoot(),
+      RouterModule.forRoot(appRoutes)
    ],
    providers: [
       AuthService,
       ErrorInterceptorProvider,
-      AlertifyService
+      AlertifyService,
+      AuthGuard,
+      TournamentService
    ],
    bootstrap: [
       AppComponent

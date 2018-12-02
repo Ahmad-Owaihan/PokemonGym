@@ -1,0 +1,11 @@
+<div *ngFor="let tournament of tournaments">
+  <form #joinForm='ngForm' (ngSubmit)='joinTournament(tournament.id)' >
+      <h2 class="text-center text-primary">{{ tournament.name }}</h2>
+      <hr>
+    
+      <div class="form-group text-center">
+        <button class="btn btn-success" type="submit">Join</button>
+        <button class="btn btn-default" type="button" (click)="leave(tournament.id)">Leave</button>
+      </div>
+    </form>
+</div>

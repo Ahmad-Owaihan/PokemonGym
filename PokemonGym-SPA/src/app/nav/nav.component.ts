@@ -31,5 +31,4 @@ export class NavComponent implements OnInit {
     localStorage.removeItem('token');
     this.alertify.message('logged out');
   }
-
 }

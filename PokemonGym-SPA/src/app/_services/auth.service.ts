@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,11 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 export class AuthService {
 
   baseUrl = 'http://localhost:5000/api/auth/';
+  userUrl = 'http://localhost:5000/api/users/name/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
+  userName: any;
+  user: any;
 
 constructor(private http: HttpClient) { }
 
@@ -22,7 +26,6 @@ login(model: any) {
         if (user) {
           localStorage.setItem('token', user.token);
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          console.log(this.decodedToken);
         }
       })
     );
