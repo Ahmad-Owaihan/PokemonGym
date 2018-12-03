@@ -13,5 +13,6 @@ namespace PokemonGym.API.Data
         Task<IEnumerable<Tournament>> GetTournaments();
         Task<Tournament> GetTournament(int id);
         Task<User> GetUser(int id);
+        bool RemoveRows(int tournamentId);
     }
 }

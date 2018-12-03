@@ -7,6 +7,7 @@ namespace PokemonGym.API.Dtos
         public int Id { get; set; } 
         public int Score { get; set; }  
         public string PhotoUrl { get; set; }
+        public string Name { get; set; }
 
         public int UserId { get; set; }
         public int TournamentId { get; set; }

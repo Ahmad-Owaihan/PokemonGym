@@ -16,6 +16,7 @@ export const appRoutes: Routes = [
             // {path: 'tournaments', component: TournamentsComponent},
         ]
     },
+    {path: 'admin', component: AdminComponent},
     {path: 'pokemons', component: PokemonsComponent},
     {path: 'tournaments', component: TournamentsComponent},
     {path: '**', redirectTo: '', pathMatch: 'full'},

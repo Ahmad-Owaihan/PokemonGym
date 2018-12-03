@@ -100,39 +100,54 @@ namespace PokemonGym.API.Controllers
         }
 
         [HttpPost("ScoreRow")]
-        public async Task<IActionResult> UpdateScores(ScoreDto scoreDto)
+        public async Task<IActionResult> UpdateScores(ListOfScoreDto listOfScoreDto)
         {
-            if (scoreDto.ScoreRow == null)
-                return BadRequest("no ScoreRow added");
-
-            var tournament = await _repo.GetTournament(scoreDto.TournamentId);
-            if (tournament == null)
-                return BadRequest("Tournament does not exist");
-            
-            var participant = tournament.Participants.SingleOrDefault(x => x.Id == scoreDto.ParticipantId);
-            if (participant == null)
-                return BadRequest("participant does not exist");
-
-            if (tournament.Scores == null)
-                tournament.Scores = new List<ScoreRow>();
-            var tournamentScores = tournament.Scores;
-            var scoreRow = new List<ScoreNumber>();
-
-            var newScoreRow = new ScoreRow()
+            // remove scoreRow loop since tournament id is all the same, we need one
+            foreach(var x in listOfScoreDto.List)
             {
-                TournamentId = tournament.Id,
-                ParticipantId = scoreDto.ParticipantId,
-                Row = scoreRow
-            };
-            foreach (var pt in scoreDto.ScoreRow)
-            {
-                newScoreRow.Row.Add(pt);
+                var tournament = await _repo.GetTournament(x.TournamentId);
+                var remove = _repo.RemoveRows(tournament.Id);
+                break;
             }
-            
-            tournamentScores.Add(newScoreRow);
+            foreach(var item in listOfScoreDto.List)
+            {
+                if (item.Row == null)
+                    return BadRequest("no ScoreRow added");
 
-            await _repo.SaveAll();
-            
+                var tournament = await _repo.GetTournament(item.TournamentId);
+                if (tournament == null)
+                    return BadRequest("Tournament does not exist");
+                
+                var participant = tournament.Participants.SingleOrDefault(x => x.Id == item.ParticipantId);
+                if (participant == null)
+                    return BadRequest("participant does not exist");
+                
+                if (tournament.Scores == null)
+                    tournament.Scores = new List<ScoreRow>();
+
+                var tournamentScores = tournament.Scores;
+                var scoreRow = new List<ScoreNumber>();
+
+                var newScoreRow = new ScoreRow()
+                {
+                    TournamentId = tournament.Id,
+                    ParticipantId = item.ParticipantId,
+                    Row = scoreRow
+                };
+
+                tournamentScores.Add(newScoreRow);
+                
+                foreach (var pt in item.Row)
+                {
+                    var number = Mapper.Map<ScoreNumber>(pt);
+                    newScoreRow.Row.Add(number);
+                    await _repo.SaveAll();
+                }
+                
+                
+                
+                await _repo.SaveAll();
+            }
             return StatusCode(201);
         }
     }

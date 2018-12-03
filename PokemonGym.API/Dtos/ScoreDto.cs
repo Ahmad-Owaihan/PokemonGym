@@ -7,6 +7,6 @@ namespace PokemonGym.API.Dtos
     {
         public int TournamentId { get; set; }
         public int ParticipantId { get; set; }
-        public List<ScoreNumber> ScoreRow { get; set; }
+        public List<ScoreNumberDto> Row { get; set; }
     }
 }

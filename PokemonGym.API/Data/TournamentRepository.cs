@@ -30,6 +30,7 @@ namespace PokemonGym.API.Data
         {
             var tournament = await _context.Tournaments
                 .Include(x => x.Participants)
+                .ThenInclude(x => x.User)
                 .Include(x => x.Scores)
                 .ThenInclude(x => x.Row)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -40,7 +41,9 @@ namespace PokemonGym.API.Data
         {
             var tournaments = await _context.Tournaments
             .Include(x => x.Participants)
+            .ThenInclude(x => x.User)
             .Include(x => x.Scores)
+            .ThenInclude(x => x.Row)
             .ToListAsync();
             return tournaments;
         }
@@ -54,6 +57,19 @@ namespace PokemonGym.API.Data
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             return user;
+        }
+
+        public bool RemoveRows(int tournamentId)
+        {
+            var score = _context.ScoreRows.Where(x => x.TournamentId == tournamentId);
+            if (score == null)
+                return false;
+            foreach(var x in score)
+            {
+                _context.ScoreRows.Remove(x);
+            }
+            _context.SaveChanges();
+            return true;
         }
     }
 }

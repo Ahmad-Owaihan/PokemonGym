@@ -10,6 +10,6 @@ namespace PokemonGym.API.Dtos
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public IEnumerable<ParticipantDto> Participants { get; set; }
-        public ICollection<ScoreRow> Scores { get; set; }
+        public ICollection<ScoreDto> Scores { get; set; }
     }
 }

@@ -1,3 +1,26 @@
-<p>
-  admin works!
-</p>
+<div class="container">
+  <form *ngFor="let tournament of tournaments" #AddScoreForm='ngForm' (ngSubmit)='addScores()'>
+    <table class="table">
+      <caption>{{ tournament.name }}</caption>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th *ngFor="let participant of tournament.participants">#{{ participant.id }}  {{ participant.name }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let participant of tournament.participants; let i = index;">
+          <td>{{ participant.name }}</td>
+          <td *ngFor="let row of tournament.scores; let col = index">
+              <input  *ngIf="model.list" type="text" class="form-control" [(ngModel)]="model.list[i].row[col].points"
+                name="data" placeholder="{{ participant.id }}"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group text-center">
+      <button class="mr-1 btn btn-success" type="submit">Update</button>
+      <button class="btn btn-success" type="button" (click)='createRows(tournament.participants)'>Edit</button>
+    </div>
+  </form>
+</div>

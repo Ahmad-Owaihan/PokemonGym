@@ -1,11 +1,19 @@
-<div *ngFor="let tournament of tournaments">
-  <form #joinForm='ngForm' (ngSubmit)='joinTournament(tournament.id)' >
-      <h2 class="text-center text-primary">{{ tournament.name }}</h2>
-      <hr>
-    
-      <div class="form-group text-center">
-        <button class="btn btn-success" type="submit">Join</button>
-        <button class="btn btn-default" type="button" (click)="leave(tournament.id)">Leave</button>
-      </div>
-    </form>
+<div class="container">
+    <table class="table" *ngFor="let tournament of tournaments">
+      <caption>{{ tournament.name }}</caption>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th *ngFor="let participant of tournament.participants">#{{ participant.id }}  {{ participant.name }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let participant of tournament.participants; let i = index;">
+          <td>{{ participant.name }}</td>
+          <td *ngFor="let row of tournament.scores; let col = index">
+            {{ tournament.scores[i].row[col].points }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
 </div>

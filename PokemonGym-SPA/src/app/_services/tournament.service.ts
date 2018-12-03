@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ getTournaments() {
 }
 
 join(model: any) {
-  return this.http.post(this.baseUrl + 'join', model);
+  return this.http.post(this.baseUrl + 'join', model).pipe(map(data => {}));
 }
 
 
@@ -28,6 +30,10 @@ public leave(model: any) {
   };
 
   return this.http.delete(this.baseUrl + 'leave', options);
+}
+
+addScore(model: any) {
+  return this.http.post(this.baseUrl + 'scorerow', model);
 }
 
 }
