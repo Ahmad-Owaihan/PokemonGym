@@ -35,6 +35,30 @@ namespace PokemonGym.API.Controllers
             return Ok(tournamentToReturn);
         }
 
+        [HttpPost("start/{id}")]
+        public async Task<IActionResult> StartTournament(int id)
+        {
+            var tournament = await _repo.GetTournament(id);
+            if (tournament == null)
+                return BadRequest("Tournament does not exist");
+
+            tournament.HasStarted = true;
+            await  _repo.SaveAll();
+            return StatusCode(200);
+        }
+
+                [HttpPost("stop/{id}")]
+        public async Task<IActionResult> StopTournament(int id)
+        {
+            var tournament = await _repo.GetTournament(id);
+            if (tournament == null)
+                return BadRequest("Tournament does not exist");
+
+            tournament.HasStarted = false;
+            await  _repo.SaveAll();
+            return StatusCode(200);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> Create(TournamentDto tournamentDto)
         {
@@ -46,6 +70,17 @@ namespace PokemonGym.API.Controllers
             _repo.Add(tournament);
             await _repo.SaveAll();
             return StatusCode(201);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var tournament = await _repo.GetTournament(id);
+            if (tournament == null)
+                return BadRequest("tournament does not exist");
+            _repo.Delete(tournament);
+            await _repo.SaveAll();
+            return StatusCode(202);
         }
 
         [HttpPost("join")]

@@ -6,6 +6,9 @@ namespace PokemonGym.API.Data
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base (options){}
+        public DbSet<Club> Clubs { get; set; }
+        public DbSet<Member> Members { get; set; }
+        public DbSet<MemberApplicant> MemberApplications { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }

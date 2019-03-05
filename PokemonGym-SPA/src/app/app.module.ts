@@ -18,6 +18,7 @@ import { TournamentsComponent } from './tournaments/tournaments.component';
 import { AdminComponent } from './admin/admin.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { TournamentService } from './_services/tournament.service';
+import { AdminGuard } from './_guards/admin.guard';
 
 @NgModule({
    declarations: [
@@ -41,6 +42,7 @@ import { TournamentService } from './_services/tournament.service';
       ErrorInterceptorProvider,
       AlertifyService,
       AuthGuard,
+      AdminGuard,
       TournamentService
    ],
    bootstrap: [

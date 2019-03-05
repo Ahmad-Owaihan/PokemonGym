@@ -16,6 +16,22 @@ getTournaments() {
   return this.http.get(this.baseUrl);
 }
 
+createTournament(model: any) {
+  return this.http.post(this.baseUrl + 'create', model).pipe(map(data => {}));
+}
+
+deleteTournament(id) {
+  return this.http.delete(this.baseUrl + id);
+}
+
+startTournament(id) {
+  return this.http.post(this.baseUrl + 'start/' + id, id);
+}
+
+stopTournament(id) {
+  return this.http.post(this.baseUrl + 'stop/' + id, id);
+}
+
 join(model: any) {
   return this.http.post(this.baseUrl + 'join', model).pipe(map(data => {}));
 }

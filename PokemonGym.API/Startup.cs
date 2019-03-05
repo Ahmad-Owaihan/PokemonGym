@@ -45,6 +45,7 @@ namespace PokemonGym.API
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ITournamentRepository, TournamentRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IClubRepository, ClubRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters

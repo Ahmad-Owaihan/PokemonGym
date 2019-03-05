@@ -1,19 +1,34 @@
 <div class="container">
-    <table class="table" *ngFor="let tournament of tournaments">
-      <caption>{{ tournament.name }}</caption>
+  <div *ngFor="let tournament of tournaments" class="">
+    <h3 class=" orange text-center"> {{ tournament.name }} </h3>
+    <table class="table" *ngIf="tournament.hasStarted" >
       <thead>
-        <tr>
-          <th>#</th>
-          <th *ngFor="let participant of tournament.participants">#{{ participant.id }}  {{ participant.name }}</th>
+        <tr class="table-danger">
+          <th class="border-bottom-0">#</th>
+          <th *ngFor="let participant of tournament.participants">{{ participant.name }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let participant of tournament.participants; let i = index;">
-          <td>{{ participant.name }}</td>
-          <td *ngFor="let row of tournament.scores; let col = index">
+          <td class="table-danger border-bottom-0 border-top-0" >{{ participant.name }}</td>
+          <td class="primary-color" *ngFor="let row of tournament.scores; let col = index">
             {{ tournament.scores[i].row[col].points }}
           </td>
         </tr>
       </tbody>
     </table>
+
+    <div *ngIf="!tournament.hasStarted" class="form-group text-center">
+      <h4>participants:</h4>
+      <ul *ngFor="let participant of tournament.participants">
+        <p>{{ participant.name }}</p>
+      </ul>
+      <p *ngIf="!tournament.participants.length" >There are currently no participants for this tournament</p>
+      <button class="mr-1 btn btn-success" type="button" (click)='joinTournament(tournament.id)'>join</button>
+      <button class="btn btn-danger" type="button" (click)='leave(tournament.id)'>leave</button>
+    </div>
+
+  </div>
+
+
 </div>

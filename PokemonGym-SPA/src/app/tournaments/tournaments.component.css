@@ -1,0 +1,15 @@
+.container {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+.primary-color {
+    background: #2C3E50;
+    color: #20c997;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.orange {
+    color:orange;
+    font-weight: bold;
+}
+

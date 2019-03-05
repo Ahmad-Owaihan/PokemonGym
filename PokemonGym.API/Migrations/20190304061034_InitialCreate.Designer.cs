@@ -9,14 +9,76 @@ using PokemonGym.API.Data;
 namespace PokemonGym.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20181202143554_initialCreate")]
-    partial class initialCreate
+    [Migration("20190304061034_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085");
+
+            modelBuilder.Entity("PokemonGym.API.Models.Club", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateClubStarted");
+
+                    b.Property<DateTime>("DateLastTournament");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clubs");
+                });
+
+            modelBuilder.Entity("PokemonGym.API.Models.Member", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ClubId");
+
+                    b.Property<DateTime>("DateJoined");
+
+                    b.Property<bool>("IsAdmin");
+
+                    b.Property<int>("Points");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("PokemonGym.API.Models.MemberApplicant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ClubId");
+
+                    b.Property<string>("Message");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MemberApplications");
+                });
 
             modelBuilder.Entity("PokemonGym.API.Models.Participant", b =>
                 {
@@ -99,13 +161,21 @@ namespace PokemonGym.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("ClubId");
+
                     b.Property<DateTime>("Date");
 
-                    b.Property<bool>("IsStarted");
+                    b.Property<bool>("HasStarted");
+
+                    b.Property<int?>("MemberId");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("MemberId");
 
                     b.ToTable("Tournaments");
                 });
@@ -124,6 +194,32 @@ namespace PokemonGym.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PokemonGym.API.Models.Member", b =>
+                {
+                    b.HasOne("PokemonGym.API.Models.Club", "Club")
+                        .WithMany("Members")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PokemonGym.API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PokemonGym.API.Models.MemberApplicant", b =>
+                {
+                    b.HasOne("PokemonGym.API.Models.Club", "Club")
+                        .WithMany("Applications")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PokemonGym.API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokemonGym.API.Models.Participant", b =>
@@ -166,6 +262,18 @@ namespace PokemonGym.API.Migrations
                         .WithMany("Scores")
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PokemonGym.API.Models.Tournament", b =>
+                {
+                    b.HasOne("PokemonGym.API.Models.Club", "Club")
+                        .WithMany("Tournaments")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PokemonGym.API.Models.Member")
+                        .WithMany("History")
+                        .HasForeignKey("MemberId");
                 });
 #pragma warning restore 612, 618
         }

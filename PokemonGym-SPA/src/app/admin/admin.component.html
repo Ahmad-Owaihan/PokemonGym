@@ -1,26 +1,47 @@
 <div class="container">
-  <form *ngFor="let tournament of tournaments" #AddScoreForm='ngForm' (ngSubmit)='addScores()'>
-    <table class="table">
-      <caption>{{ tournament.name }}</caption>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th *ngFor="let participant of tournament.participants">#{{ participant.id }}  {{ participant.name }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let participant of tournament.participants; let i = index;">
-          <td>{{ participant.name }}</td>
-          <td *ngFor="let row of tournament.scores; let col = index">
-              <input  *ngIf="model.list" type="text" class="form-control" [(ngModel)]="model.list[i].row[col].points"
-                name="data" placeholder="{{ participant.id }}"/>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <form #CreateTournament='ngForm' (ngSubmit)='createTournament()'>
     <div class="form-group text-center">
-      <button class="mr-1 btn btn-success" type="submit">Update</button>
-      <button class="btn btn-success" type="button" (click)='createRows(tournament.participants)'>Edit</button>
+      <h4>create a tournament</h4>
+      <input type='text' [(ngModel)]="model.name" name='name' placeholder='tournament name'> <br>
+      <button class="mr-1 btn btn-success" type="submit">Create</button>
+   </div>
+  </form>
+  <form *ngFor="let tournament of tournaments; let index = index;" class="border border-primary"  #AddScoreForm='ngForm' (ngSubmit)='addScores()'>
+    <div>
+      <h3 class="text-center">{{tournament.name}} {{tournament.participants.length}} </h3>
+      <table *ngIf="tournament.hasStarted" class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th *ngFor="let participant of tournament.participants">{{ participant.name }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participant of tournament.participants; let i = index;">
+            <td>{{ participant.name }}</td>
+            <td *ngFor="let row of tournament.participants; let col = index">
+              <span *ngIf="isEditing[index]">
+                <input  *ngIf="model?.list" type="number" class="form-control" [(ngModel)]="model.list[i].row[col].points"
+                  name="data" placeholder="{{ participant.id }}"/>
+                </span>
+                <span *ngIf="!isEditing[index]">{{ tournament.scores[i]?.row[col].points }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="!tournament.hasStarted" class='text-center'>
+        <ul *ngFor="let participant of tournament.participants">
+          <li>{{ participant.name }}</li>
+        </ul>
+        <p *ngIf="!tournament.participants.length">There are currently no participants.</p>
+      </div>
+      <div class="form-group text-center">
+        <button *ngIf="tournament.hasStarted" class="mr-1 btn btn-warning" type='button' (click)='stopTournament(tournament.id)'>back to not started</button>
+        <button *ngIf="tournament.hasStarted && isEditing[index]" class="mr-1 btn btn-success" type="submit">update</button>
+        <button *ngIf="tournament.hasStarted" class="mr-1 btn btn-success" type="button" (click)='createRows(tournament)'>edit</button>
+        <button *ngIf="!tournament.hasStarted" class="mr-1 btn btn-warning" type='button' (click)='startTournament(tournament.id)'>start tournament</button>
+        <button class="btn btn-danger" type="button" (click)='deleteTournament(tournament.id)'>delete tournament</button>
+      </div>
     </div>
   </form>
 </div>

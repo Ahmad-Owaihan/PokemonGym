@@ -29,6 +29,8 @@ export class TournamentsComponent implements OnInit {
       this.alertify.success('You left the tournament!');
     }, error => {
       this.alertify.error(error);
+    }, () => {
+      this.ngOnInit();
     });
   }
 
@@ -39,6 +41,8 @@ export class TournamentsComponent implements OnInit {
       this.alertify.success('You joined the tournament!');
     }, error => {
       this.alertify.error(error);
+    }, () => {
+      this.ngOnInit();
     });
   }
 
